@@ -13,10 +13,10 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
 ## install wget
 RUN apt update -y && apt install -y wget bzip2 libbz2-dev
 
-RUN wget https://github.com/samtools/bcftools/releases/download/1.17/bcftools-1.17.tar.bz2  && \
-    tar -xvjf bcftools-1.17.tar.bz2 && rm -f bcftools-1.17.tar.bz2 && \
-    cd bcftools-1.17 && \
-    make && mv /rocker-build/bcftools-1.17/bcftools /bin/.
+RUN wget https://github.com/samtools/bcftools/releases/download/1.20/bcftools-1.20.tar.bz2  && \
+    tar -xvjf bcftools-1.20.tar.bz2 && rm -f bcftools-1.20.tar.bz2 && \
+    cd bcftools-1.20 && \
+    make && mv /rocker-build/bcftools-1.20/bcftools /bin/.
 
 # Install BiocManager and the desired version of Bioconductor
 RUN R -e "install.packages('BiocManager', dependencies=TRUE)"

@@ -3,7 +3,7 @@
 set -e
 
 # export bcftools plugin environmental variable
-export BCFTOOLS_PLUGINS=/rocker-build/bcftools-1.17/plugins
+export BCFTOOLS_PLUGINS=/rocker-build/bcftools-1.20/plugins
 
 # Define root directory of repo
 BASEDIR="$(dirname "${BASH_SOURCE[0]}")"
