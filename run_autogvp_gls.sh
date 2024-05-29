@@ -162,7 +162,7 @@ if [[ ! -e $selected_submissions ]]; then
       
       fi
       
-      selected_submissions="$BASEDIR/results/ClinVar-selected-submissions.tsv"
+      selected_submissions="$BASEDIR/$DATADIR/ClinVar-selected-submissions.tsv"
         
 fi
 
