@@ -29,8 +29,12 @@ subfield_list=$(join_by '\t%' $subfields)
 # Add standard vcf columns to list to parse
 all_columns="%CHROM\t%POS\t%ID\t%REF\t%ALT\t%QUAL\t%FILTER\t%${subfield_list}\n"
 
+echo $all_columns
+
 # run vcftools query to parse all columns and info subfields, and include header
 bcftools query -H -f $all_columns $vcf_file > $vcf_parsed_file
+
+echo "Done parsing"
 
 # Extract VEP CSQ field names and save to tsv
 bcftools +split-vep $vcf_file -l | awk -F '\t' '{print $2}' > $csq_fields
