@@ -40,4 +40,4 @@ echo "Done parsing"
 bcftools +split-vep $vcf_file -l | awk -F '\t' '{print $2}' > $csq_fields
 
 # remove intermediate files
-rm ${vcf_file%.vcf*}_subfields.tsv ${vcf_file%.vcf*}_subfields_first.tsv ${vcf_file%.vcf*}_subfields_all.tsv
+# rm ${vcf_file%.vcf*}_subfields.tsv ${vcf_file%.vcf*}_subfields_first.tsv ${vcf_file%.vcf*}_subfields_all.tsv
