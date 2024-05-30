@@ -13,7 +13,14 @@ egrep -v "^#" $vcf_file | awk '{print $8}' | sed 's/=.*//' | sort -u > ${vcf_fil
 
 # Merge extracted subfields and assign to variable
 cat ${vcf_file%.vcf*}_subfields_all.tsv ${vcf_file%.vcf*}_subfields_first.tsv | sort -u > ${vcf_file%.vcf*}_subfields.tsv
-subfields=$(cat ${vcf_file%.vcf*}_subfields.tsv)
+
+# Get only INFO subfields defined in header
+cat $vcf_file | grep  "##INFO" | awk '{split($1,a,"##INFO=<ID=");  split(a[2],b,",");print b[1]}' > ${vcf_file%.vcf*}_defined_subfields.tsv
+
+# Filter the subfields exist in INFO header
+awk 'FNR==NR{a[$1]=1;next;}{if(a[$1]==1){print;}}' ${vcf_file%.vcf*}_defined_subfields.tsv ${vcf_file%.vcf*}_subfields.tsv > ${vcf_file%.vcf*}_final_subfields.tsv
+
+subfields=$(cat ${vcf_file%.vcf*}_final_subfields.tsv)
 
 # Call function to join subfields
 function join_by {
@@ -40,4 +47,4 @@ echo "Done parsing"
 bcftools +split-vep $vcf_file -l | awk -F '\t' '{print $2}' > $csq_fields
 
 # remove intermediate files
-# rm ${vcf_file%.vcf*}_subfields.tsv ${vcf_file%.vcf*}_subfields_first.tsv ${vcf_file%.vcf*}_subfields_all.tsv
+# rm ${vcf_file%.vcf*}_subfields.tsv ${vcf_file%.vcf*}_subfields_first.tsv ${vcf_file%.vcf*}_subfields_all.tsv ${vcf_file%.vcf*}_final_subfields.tsv ${vcf_file%.vcf*}_defined_subfields.tsv
