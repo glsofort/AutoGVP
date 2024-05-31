@@ -242,5 +242,7 @@ echo "Filtering VEP annotations and creating final output..."
 
 Rscript $BASEDIR/scripts/04-filter_gene_annotations.R --vcf $vcf_parsed_file --autogvp $autogvp_output --output $out_file --outdir $out_dir --colnames $BASEDIR/${DATADIR}/output_colnames.tsv
 
+echo "Rscript $BASEDIR/scripts/04-filter_gene_annotations.R --vcf $vcf_parsed_file --autogvp $autogvp_output --output $out_file --outdir $out_dir --colnames $BASEDIR/${DATADIR}/output_colnames.tsv"
+
 # Remove intermediate files
 rm $autogvp_input $vcf_parsed_file $autogvp_output $out_dir/$out_file.filtered_csq_subfields.tsv $out_dir/${out_file}_multianno_filtered.txt $out_dir/${out_file}_autopvs1_filtered.tsv $out_dir/${out_file}_intervar_filtered.txt
