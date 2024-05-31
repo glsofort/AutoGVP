@@ -108,7 +108,7 @@ vcf_separated <- vcf %>%
   # Separate `CSQ` transcript annotations into distinct rows (comma separated)
   separate_longer_delim(CSQ, delim = ",") %>%
   # separate `CSQ` fields into unique columns, named in `csq_cols`
-  separate_wider_delim(CSQ, "|", names = csq_cols) %>%
+  separate_wider_delim(CSQ, "|", names = csq_cols, too_few = "debug") %>%
   # Select columns to retain
   dplyr::select(any_of(columns_to_retain)) %>%
   dplyr::select(-any_of(c(
