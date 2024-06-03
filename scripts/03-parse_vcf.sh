@@ -46,5 +46,7 @@ echo "Done parsing"
 # Extract VEP CSQ field names and save to tsv
 bcftools +split-vep $vcf_file -l | awk -F '\t' '{print $2}' > $csq_fields
 
+echo "Done parsing"
+
 # remove intermediate files
-# rm ${vcf_file%.vcf*}_subfields.tsv ${vcf_file%.vcf*}_subfields_first.tsv ${vcf_file%.vcf*}_subfields_all.tsv ${vcf_file%.vcf*}_final_subfields.tsv ${vcf_file%.vcf*}_defined_subfields.tsv
+rm ${vcf_file%.vcf*}_subfields.tsv ${vcf_file%.vcf*}_subfields_first.tsv ${vcf_file%.vcf*}_subfields_all.tsv ${vcf_file%.vcf*}_final_subfields.tsv ${vcf_file%.vcf*}_defined_subfields.tsv
