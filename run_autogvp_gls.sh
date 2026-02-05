@@ -6,7 +6,7 @@ set -e
 BASEDIR="$(dirname "${BASH_SOURCE[0]}")"
 echo "$BASEDIR"
 
-DATADIR="gvpdata"
+DATADIR="data"
 
 ## default files
 variant_summary_file="$BASEDIR/${DATADIR}/ClinVar-selected-submissions.tsv"
