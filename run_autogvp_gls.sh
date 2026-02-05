@@ -2,9 +2,6 @@
 
 set -e
 
-# export bcftools plugin environmental variable
-export BCFTOOLS_PLUGINS=/rocker-build/bcftools-1.20/plugins
-
 # Define root directory of repo
 BASEDIR="$(dirname "${BASH_SOURCE[0]}")"
 echo "$BASEDIR"
@@ -14,7 +11,7 @@ DATADIR="gvpdata"
 ## default files
 variant_summary_file="$BASEDIR/${DATADIR}/ClinVar-selected-submissions.tsv"
 
-# define parameter variables 
+# define parameter variables
 while [ $# -gt 0 ]; do
   case "$1" in
     --workflow*|-w*)
@@ -105,65 +102,65 @@ done
 
 # If selected ClinVar submissions files not provided, then run select-ClinVar-submissions.R
 if [[ ! -e $selected_submissions ]]; then
-    
+
     echo "select ClinVar submission file not specified. Running select-ClinVar-submissions Rscript..."
-    
+
   # if variant_summary or submission_summary args not provided, check if files exist in data/
 #  if [[ $variant_summary -eq 0  || $submission_summary -eq 0 ]]
   if [[ ! -e $variant_summary || ! -e $submission_summary ]]
   then
-      
+
       echo "variant summary and/or submission_summary file(s) not specified. Checking if files exist in ${DATADIR}/..."
-      
+
       variant_summary=$(find ${DATADIR}/ -type f -name "variant_summary*")
       submission_summary=$(find ${DATADIR}/ -type f -name "submission_summary*")
-      
+
       # if no files found matching pattern, download latest versions from ClinVar
      # if [[ -z "$variant_summary" || -z "$submission_summary" ]]
       if [[ ! -e "$variant_summary" || ! -e "$submission_summary" ]]
       then
-        
+
         echo "variant_summary and/or submission_summary files not found. Downloading latest versions from ClinVar..."
-        
+
         bash $BASEDIR/scripts/download_db_files.sh
-        
+
         variant_summary=$(find ${DATADIR}/ -type f -name "variant_summary*")
-        submission_summary=$(find ${DATADIR}/ -type f -name "submission_summary*") ; 
-        
-      else 
-        
+        submission_summary=$(find ${DATADIR}/ -type f -name "submission_summary*") ;
+
+      else
+
         echo "variant and submission summary files found. Running select-ClinVar-submissions Rscript..."
-        
+
       fi
-      
+
     fi
-      
+
         if [[ ! -e $conceptIDs ]] ; then
-        
+
         echo "resolving ClinVar conflicts using default parameters..."
-      
+
         Rscript $BASEDIR/scripts/select-clinVar-submissions.R --variant_summary $variant_summary --submission_summary $submission_summary --outdir $out_dir
-        
+
       fi
-      
-      if [[ -f $conceptIDs && -z $conflict_res ]] ; then 
-      
+
+      if [[ -f $conceptIDs && -z $conflict_res ]] ; then
+
         echo "resolving ClinVar conflicts with provided concept IDs and taking latest date evaluated call..."
-      
+
         Rscript $BASEDIR/scripts/select-clinVar-submissions.R --variant_summary $variant_summary --submission_summary $submission_summary --outdir $out_dir --conceptID_list $conceptIDs --conflict_res "latest"
-        
+
       fi
-      
+
       if [[ -f $conceptIDs && -n $conflict_res ]] ; then
-      
+
         echo "resolving ClinVar conflicts with provided concept IDs and specified conflict resolution..."
-      
+
         Rscript $BASEDIR/scripts/select-clinVar-submissions.R --variant_summary $variant_summary --submission_summary $submission_summary --outdir $out_dir --conceptID_list $conceptIDs --conflict_res $conflict_res
-      
+
       fi
-      
+
       selected_submissions="$BASEDIR/$DATADIR/ClinVar-selected-submissions.tsv"
-        
+
 fi
 
 
@@ -178,7 +175,7 @@ multianno_input=$out_dir/${out_file}_multianno_filtered.txt
 autopvs1_input=$out_dir/${out_file}_autopvs1_filtered.tsv
 intervar_input=$out_dir/${out_file}_intervar_filtered.txt
 
-# Run AutoGVP 
+# Run AutoGVP
 echo "Running AutoGVP..."
 
 # Run appropriate Rscript based on workflow source (Cavatica vs. custom)
@@ -195,9 +192,9 @@ if [[ "$workflow" = "cavatica" ]] ; then
     --output $out_file \
     --outdir $out_dir \
     --variant_summary $selected_submissions
-    
+
     else
-    
+
       # Run AutoGVP from Cavatica workflow with clinvar annotation in sample vcf
     Rscript $BASEDIR/scripts/02-annotate_variants_CAVATICA_input.R --vcf $autogvp_input \
     --multianno $multianno_input \
@@ -206,9 +203,9 @@ if [[ "$workflow" = "cavatica" ]] ; then
     --output $out_file \
     --outdir $out_dir \
     --variant_summary $selected_submissions
-    
+
   fi
-  
+
   autogvp_output=${out_dir}/${out_file}".cavatica_input.annotations_report.abridged.tsv"
 
   else
@@ -222,7 +219,7 @@ if [[ "$workflow" = "cavatica" ]] ; then
   --output $out_file \
   --outdir $out_dir \
   --variant_summary $selected_submissions \
-  
+
   autogvp_output=${out_dir}/${out_file}".custom_input.annotations_report.abridged.tsv"
 
 fi
